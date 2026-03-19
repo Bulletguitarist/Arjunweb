@@ -348,7 +348,7 @@ tr:hover td{background:#f8f9fa;}
 </div><!-- end #site -->
 
 <!-- ===== ADMIN ===== -->
-<div id="admin">
+<div id="admin" style="display:none">
   <!-- LOGIN -->
   <div class="a-login" id="aLogin">
     <div class="a-login-box">
@@ -445,7 +445,9 @@ const sb = supabase.createClient(SURL, SKEY);
 // ===== ROUTING =====
 function router() {
   const path = window.location.pathname;
-  if (path === '/admin' || path.startsWith('/admin')) {
+  const hash = window.location.hash;
+  const isAdmin = path === '/admin' || path.startsWith('/admin') || hash === '#admin' || hash.startsWith('#admin');
+  if (isAdmin) {
     document.getElementById('site').style.display = 'none';
     document.getElementById('admin').style.display = 'block';
     document.title = 'Admin — Brush & Soul';
@@ -460,6 +462,14 @@ function router() {
 }
 
 window.addEventListener('popstate', router);
+window.addEventListener('hashchange', router);
+
+// Run immediately on page load
+if (window.location.hash === '#admin' || window.location.hash.startsWith('#admin')) {
+  document.getElementById('site').style.display = 'none';
+  document.getElementById('admin').style.display = 'block';
+  document.title = 'Admin — Brush & Soul';
+}
 router();
 
 // ===== SITE =====
